@@ -7,7 +7,7 @@ const {
   RUSTFS_REGION,
 } = require("./env");
 
-const BUCKET_NAME = "koleksi-resep";
+const BUCKET_NAME = "nibiru-chat";
 
 const s3Client = new S3Client({
   endpoint: RUSTFS_ENDPOINT,
