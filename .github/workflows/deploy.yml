@@ -1,4 +1,4 @@
-name: Deploy to DigitalOcean
+name: Run Github Runners CI/CD
 
 on:
   push:
@@ -7,20 +7,43 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_IP }}
-          username: root
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            cd nibiru-chat-server
-            git pull origin master
-            docker-compose down --remove-orphans
-            docker-compose up --build -d
+      - name: Create .env
+        run: |
+          {
+            echo "APP_NAME=${{ secrets.APP_NAME }}"
+            echo "NODE_ENV=${{ secrets.NODE_ENV }}"
+            echo "PORT=${{ secrets.PORT }}"
+            echo "API_URL=${{ secrets.API_URL }}"
+            echo "CLIENT_URL=${{ secrets.CLIENT_URL }}"
+            echo "PGUSER=${{ secrets.PGUSER }}"
+            echo "PGHOST=${{ secrets.PGHOST }}"
+            echo "PGPASSWORD=${{ secrets.PGPASSWORD }}"
+            echo "PGDATABASE=${{ secrets.PGDATABASE }}"
+            echo "PGPORT=${{ secrets.PGPORT }}"
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}"
+            echo "EMAIL_FROM=${{ secrets.EMAIL_FROM }}"
+            echo "MAILTRAP_TOKEN=${{ secrets.MAILTRAP_TOKEN }}"
+            echo "RUSTFS_ENDPOINT=${{ secrets.RUSTFS_ENDPOINT }}"
+            echo "RUSTFS_ACCESS_KEY=${{ secrets.RUSTFS_ACCESS_KEY }}"
+            echo "RUSTFS_SECRET_KEY=${{ secrets.RUSTFS_SECRET_KEY }}"
+          } > .env
+
+      - name: Validate Docker Compose
+        run: docker compose config --quiet
+
+      - name: Run Deploy Script
+        run: docker compose up -d --remove-orphans --build
+
+      - name: Cleanup .env
+        if: always()
+        run: rm -f .env
+
+      - name: Cleanup unused images
+        if: always()
+        run: docker image prune -f

@@ -2,7 +2,7 @@ const userModel = require('../models/user.model');
 const createPagination = require('../utils/createPagination');
 const { success, failed } = require('../utils/createResponse');
 const deleteFile = require('../utils/deleteFile');
-const uploadToCloudinary = require('../utils/uploadToCloudinary');
+const uploadToRustfs = require('../utils/uploadToRustfs');
 
 module.exports = {
   list: async (req, res) => {
@@ -111,7 +111,7 @@ module.exports = {
       if (req.files) {
         // upload photo
         if (req.files.photo) {
-          photo = await uploadToCloudinary(req.files.photo[0]);
+          photo = await uploadToRustfs(req.files.photo[0]);
           deleteFile(req.files.photo[0].path);
         }
       }

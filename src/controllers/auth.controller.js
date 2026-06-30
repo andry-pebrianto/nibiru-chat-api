@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const { v4: uuidv4 } = require("uuid");
+const nodemailer = require("nodemailer");
 // eslint-disable-next-line import/no-extraneous-dependencies
-const { Resend } = require("resend");
 const authModel = require("../models/auth.model");
 const userModel = require("../models/user.model");
 const activateAccountEmail = require("../utils/email/activateAccountEmail");
@@ -12,10 +12,17 @@ const {
   APP_NAME,
   EMAIL_FROM,
   API_URL,
-  RESEND_API_KEY,
+  MAILTRAP_TOKEN,
 } = require("../utils/env");
 
-const resend = new Resend(RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  host: "live.smtp.mailtrap.io",
+  port: 587,
+  auth: {
+    user: "api",
+    pass: MAILTRAP_TOKEN,
+  },
+});
 
 module.exports = {
   register: async (req, res) => {
@@ -45,13 +52,12 @@ module.exports = {
       await authModel.updateToken(insertData.rows[0].id, token);
 
       // send email for reset password
-      const templateEmail = {
+      const result = await transporter.sendMail({
         from: `${APP_NAME} <${EMAIL_FROM}>`,
         to: req.body.email.toLowerCase(),
         subject: "Activate Your Account!",
         html: activateAccountEmail(`${API_URL}/auth/activation/${token}`),
-      };
-      const result = await resend.emails.send(templateEmail);
+      });
       console.log(result);
 
       success(res, {

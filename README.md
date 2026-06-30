@@ -3,7 +3,7 @@
 </div>
 <h3 align="center">Nibiru Chat API</h3>
 <p align="center">
-  <a href="https://github.com/andry-pebrianto/nibiru-chat-server/issues">Report Bug</a>
+  <a href="https://github.com/andry-pebrianto/nibiru-chat-api/issues">Report Bug</a>
 </p>
 
 <!-- ABOUT THE PROJECT -->
@@ -17,7 +17,6 @@ This is a Restful API repository for Nibiru Chat. This Restful API is built usin
 - [Express](https://expressjs.com/)
 - [PostgreSQL](https://www.postgresql.org/)
 - [JWT](https://jwt.io/)
-- [Google APIs](https://github.com/googleapis/google-api-nodejs-client)
 - [Nodemailer](https://nodemailer.com/about/)
 - [Bcrypt](https://www.npmjs.com/package/bcrypt)
 
@@ -25,7 +24,7 @@ This is a Restful API repository for Nibiru Chat. This Restful API is built usin
 
 ### Installation
 
-- Clone this project with `git clone https://github.com/andry-pebrianto/nibiru-chat-server.git`
+- Clone this project with `git clone https://github.com/andry-pebrianto/nibiru-chat-api.git`
 - Install package required with `npm install`
 - Setting .env
 
@@ -40,18 +39,12 @@ PGHOST=
 PGPASSWORD=
 PGDATABASE=
 PGPORT=
-PGSSLMODE=
 JWT_SECRET=
-EMAIL_USER=
 EMAIL_FROM=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
-CLOUDINARY_CLOUD_NAME=
-RESEND_API_KEY=
-VIRTUAL_HOST=
-LETSENCRYPT_HOST=
-LETSENCRYPT_EMAIL=
-MAX_OLD_SPACE_SIZE=
+MAILTRAP_TOKEN=
+RUSTFS_ENDPOINT=
+RUSTFS_ACCESS_KEY=
+RUSTFS_SECRET_KEY=
 ```
 
 - Migrate database using `npm run migrate up`
@@ -64,8 +57,8 @@ MAX_OLD_SPACE_SIZE=
 
 ## Related Project
 
-- [Nibiru Chat Client](https://github.com/andry-pebrianto/nibiruchat-client)
-- [Nibiru Chat Demo](https://nibiruchat.andrypebrianto.com)
+- [Nibiru Chat Client](https://github.com/andry-pebrianto/nibiru-chat-client)
+- [Nibiru Chat Demo](https://nibiru-chat.andrypebrianto.com)
 
 ## Authors
 

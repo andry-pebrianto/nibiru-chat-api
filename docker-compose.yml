@@ -1,24 +1,11 @@
-version: '3.8'
-
 services:
-  nibiru-chat-server:
+  nibiru-chat-api:
     build:
       context: .
-    container_name: nibiru-chat-server
-    restart: always
-    expose:
-      - 3002
+    container_name: nibiru-chat-api
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
     env_file:
       - .env
-    environment:
-      VIRTUAL_HOST: ${VIRTUAL_HOST}
-      LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
-      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
-      NODE_OPTIONS: "--max-old-space-size=${MAX_OLD_SPACE_SIZE}"
     command: sh -c "npm run migrate up && npm run start"
-    networks:
-      - global
-
-networks:
-  global:
-    external: true

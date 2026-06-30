@@ -1,16 +1,19 @@
-const v8 = require("v8");
 const http = require('http');
 const express = require('express');
 const socketIo = require('socket.io');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const cors = require('cors');
+const rateLimit = require("express-rate-limit");
 const socketController = require('./src/socket');
 const { APP_NAME, NODE_ENV, PORT } = require('./src/utils/env');
 const { failed } = require('./src/utils/createResponse');
 
 // deklarasi express
 const app = express();
+
+// trust proxy
+app.set("trust proxy", 1);
 
 // middleware
 app.use(express.json());
@@ -23,6 +26,20 @@ app.use(
 app.use(xss());
 app.use(cors());
 app.use(express.static('public'));
+
+// rate limiter
+const limiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too Many Requests",
+    data: "Terlalu banyak request, coba lagi setelah 15 menit",
+  },
+});
+app.use(limiter);
 
 // root router
 app.get('/', (req, res) => res.send(`${APP_NAME} API - ${NODE_ENV[0].toUpperCase() + NODE_ENV.slice(1)}`));
@@ -54,9 +71,4 @@ server.listen(PORT, () => {
   console.log(`Server started on port ${PORT} with ${NODE_ENV} environment`);
   console.log(`Visit http://localhost:${PORT}`);
   console.log('Developed by Andry Pebrianto');
-  console.log(
-    "Max old space size:",
-    v8.getHeapStatistics().heap_size_limit / 1024 / 1024,
-    "MB",
-  );
 });
