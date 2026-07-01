@@ -61,7 +61,7 @@ RUSTFS_SECRET_KEY=
 - [Nibiru Chat Demo](https://nibiru-chat.andrypebrianto.com)
 
 ## Authors
-
+ 
 Contributors names and contact info:
 
 1. Andry Pebrianto
