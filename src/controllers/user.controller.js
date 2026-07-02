@@ -116,7 +116,7 @@ module.exports = {
         }
       }
 
-      await userModel.changePhoto(user.rows[0].id, photo);
+      await userModel.changePhoto(user.rows[0].id, photo.url);
 
       success(res, {
         code: 200,
